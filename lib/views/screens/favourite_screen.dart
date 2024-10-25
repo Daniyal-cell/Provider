@@ -1,6 +1,8 @@
-import 'package:counter_with_provider/ProviderScreen/favourite_provider.dart';
+import 'package:counter_with_provider/providers/favourite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'like_screen.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({super.key});
@@ -21,6 +23,31 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             color: Colors.white,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Row(
+              children: [
+                IconButton(onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context)=>LikeScreen(),
+                      )
+                  );
+                }, icon: const Icon(Icons.add_shopping_cart_rounded,color: Colors.red,)),
+               Consumer<FavouriteProvider>(
+                   builder: (context, value, child){
+                     return Text(value.selectedItem.length.toString(),style: const TextStyle(
+                       fontSize: 20,
+                       color: Colors.black,
+                     ),);
+                   }
+               )
+              ],
+            )
+          )
+        ],
       ),
       body: Consumer<FavouriteProvider>(builder: (context, value, child) {
         return ListView.builder(
@@ -33,7 +60,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                     ? value.removeItem(index)
                     : value.addItem(index);
               },
-              title: Text("Item " + index.toString()),
+              title: Text("Item $index"),
               trailing: Icon(
                 value.selectedItem.contains(index)
                     ? Icons.favorite
